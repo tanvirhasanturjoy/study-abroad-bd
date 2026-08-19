@@ -103,7 +103,7 @@ export async function parseCvWithAgent(cvText) {
           content: `CV text:\n\n${text}`
         }
       ],
-      model: 'llama-3.3-70b-versatile',
+      model: 'openai/gpt-oss-120b',
       response_format: { type: 'json_object' }
     });
 
