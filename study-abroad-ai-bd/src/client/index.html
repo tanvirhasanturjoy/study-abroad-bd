@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Study Abroad AI BD</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="noise"></div>
+
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a href="#" class="brand" data-view-link="advisor">
+          <span class="brand-mark"></span>
+          Study Abroad AI BD
+        </a>
+        <nav class="tabs" aria-label="Main navigation">
+          <button type="button" class="tab-btn active" data-view-link="advisor">Advisor</button>
+          <button type="button" class="tab-btn" data-view-link="account">Account</button>
+        </nav>
+        <div class="session" id="sessionArea">
+          <!-- Filled in by auth.js: signed-out actions or the signed-in user chip -->
+        </div>
+      </div>
+    </header>
+
+    <main class="shell">
+      <!-- ===================== ADVISOR VIEW ===================== -->
+      <section class="view" id="view-advisor">
+        <section class="hero">
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> Built for Bangladeshi students</p>
+            <h1>Study Abroad AI BD</h1>
+            <p class="subtitle">A live-research advisor that turns your result, IELTS, budget, sponsor readiness, and visa risk into a practical country shortlist.</p>
+            <div class="hero-actions">
+              <a href="#profileForm" class="primary-link">Start matching</a>
+              <span class="pulse-dot"></span>
+              <span>Live web snippets + local scoring</span>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Student planning study abroad">
+            <img src="/assets/hero-student.png" alt="Bangladeshi student planning study abroad with documents and laptop" />
+            <div class="float-card float-card-top">
+              <span>Visa confidence</span>
+              <strong>82%</strong>
+            </div>
+            <div class="float-card float-card-bottom">
+              <span>Budget route</span>
+              <strong>Malaysia + Germany</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="stats-strip">
+          <div><strong>155</strong><span>country routes</span></div>
+          <div><strong>8+</strong><span>live source links</span></div>
+          <div><strong>0</strong><span>paid AI tokens</span></div>
+          <div><strong>BDT</strong><span>budget-first scoring</span></div>
+        </section>
+
+        <section class="panel cv-panel" id="cvAssistant">
+          <div class="panel-title">
+            <span>AI</span>
+            <div>
+              <h2>CV Assistant</h2>
+              <p>Upload a CV and the agent separates personal details, education history, and skills — then drop the results into the form below, or into your account profile.</p>
+            </div>
+          </div>
+          <div class="cv-grid">
+            <div class="cv-input">
+              <label>Upload CV (PDF, DOCX, or TXT)
+                <input type="file" id="cvFile" accept=".pdf,.docx,.txt" />
+              </label>
+              <div class="cv-divider"><span>or paste CV text</span></div>
+              <label>Paste CV text
+                <textarea id="cvTextInput" rows="6" placeholder="Paste the CV content here..."></textarea>
+              </label>
+              <button type="button" id="analyzeCvBtn"><span>Analyze CV</span></button>
+              <div id="cvStatus" class="status cv-status">Upload a file or paste text, then analyze.</div>
+            </div>
+            <div id="cvResults" class="cv-results"></div>
+          </div>
+        </section>
+
+        <section class="panel sop-panel" id="sopWriter">
+          <div class="panel-title">
+            <span>AI</span>
+            <div>
+              <h2>SOP Writer</h2>
+              <p>Turn your analyzed CV into a first draft Statement of Purpose. Analyze a CV above first — this reuses those results.</p>
+            </div>
+          </div>
+          <div class="sop-grid">
+            <div class="sop-input">
+              <div class="form-grid">
+                <label>Target country
+                  <input type="text" id="sopCountry" placeholder="e.g. Germany" />
+                </label>
+                <label>Target university
+                  <input type="text" id="sopUniversity" placeholder="e.g. TU Munich" />
+                </label>
+                <label>Program / field of study
+                  <input type="text" id="sopProgram" placeholder="e.g. MSc Computer Science" />
+                </label>
+              </div>
+              <label>Anything else to include (optional)
+                <textarea id="sopNotes" rows="4" placeholder="Specific motivations, projects, or points you want mentioned..."></textarea>
+              </label>
+              <button type="button" id="generateSopBtn"><span>Generate SOP</span></button>
+              <div id="sopStatus" class="status cv-status">Analyze a CV in the CV Assistant above, then generate your SOP here.</div>
+            </div>
+            <div class="sop-output" id="sopOutput" hidden>
+              <div class="sop-output-head">
+                <span id="sopWordCount"></span>
+                <div class="sop-output-actions">
+                  <button type="button" id="copySopBtn" class="secondary-btn"><span>Copy</span></button>
+                  <button type="button" id="downloadSopBtn" class="secondary-btn"><span>Download .txt</span></button>
+                </div>
+              </div>
+              <textarea id="sopText" rows="20" spellcheck="true"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace">
+          <form id="profileForm" class="panel form-panel">
+            <div class="panel-title">
+              <span>01</span>
+              <div>
+                <h2>Your profile</h2>
+                <p>Change the numbers. The advisor recalculates your route.</p>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>Subject
+                <input name="subject" id="fieldSubject" value="Computer Science" />
+              </label>
+              <label>Degree
+                <select name="degree" id="fieldDegree">
+                  <option>Bachelor</option>
+                  <option>Masters</option>
+                  <option>Diploma</option>
+                </select>
+              </label>
+              <label>GPA / result
+                <input name="gpa" id="fieldGpa" type="number" min="0" max="5" step="0.1" value="4.4" />
+              </label>
+              <label>IELTS
+                <input name="ielts" type="number" min="0" max="9" step="0.5" value="6.5" />
+              </label>
+              <label>Yearly budget (BDT)
+                <input name="budgetBdt" type="number" min="0" step="50000" value="2200000" />
+              </label>
+              <label>Priority
+                <select name="priority">
+                  <option value="budget">Lowest cost</option>
+                  <option value="visa">Visa approval chance</option>
+                  <option value="pr">PR / settlement</option>
+                  <option value="balanced">Balanced</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="checks">
+              <label><input name="hasBankStatement" type="checkbox" checked /> Bank statement ready</label>
+              <label><input name="hasSponsorDocs" type="checkbox" checked /> Sponsor documents ready</label>
+              <label><input name="wantsPrPathway" type="checkbox" checked /> Wants PR pathway</label>
+            </div>
+
+            <button type="submit"><span>Research and recommend</span></button>
+          </form>
+
+          <section class="panel results-panel">
+            <div class="panel-title">
+              <span>02</span>
+              <div>
+                <h2>Advisor output</h2>
+                <p>Ranked country paths, visa gaps, and source links.</p>
+              </div>
+            </div>
+            <div id="status" class="status">Submit your profile to get recommendations.</div>
+            <div id="results" class="results"></div>
+          </section>
+        </section>
+      </section>
+
+      <!-- ===================== ACCOUNT VIEW ===================== -->
+      <section class="view" id="view-account" hidden>
+        <div class="account-head">
+          <p class="eyebrow"><span></span> Your account</p>
+          <h1 class="account-title">Save your progress</h1>
+          <p class="subtitle">Create an account to keep your academic profile on file, so every advisor run and CV import starts from where you left off.</p>
+        </div>
+
+        <!-- Signed-out: login / register -->
+        <div id="authCard" class="panel auth-panel">
+          <div class="auth-tabs">
+            <button type="button" class="auth-tab-btn active" data-auth-tab="login">Log in</button>
+            <button type="button" class="auth-tab-btn" data-auth-tab="register">Create account</button>
+          </div>
+
+          <!-- Login -->
+          <form id="loginForm" class="auth-form" data-auth-panel="login">
+            <div class="form-grid">
+              <label>Email
+                <input name="email" type="email" required autocomplete="email" placeholder="you@example.com" />
+              </label>
+              <label>Password
+                <input name="password" type="password" required autocomplete="current-password" placeholder="••••••••" />
+              </label>
+            </div>
+            <button type="submit"><span>Log in</span></button>
+            <div id="loginStatus" class="status auth-status" hidden></div>
+          </form>
+
+          <!-- Register -->
+          <form id="registerForm" class="auth-form" data-auth-panel="register" hidden>
+            <div class="stepper">
+              <div class="step active" data-step="1"><span>1</span>Verify contact</div>
+              <div class="step" data-step="2"><span>2</span>Set your password</div>
+            </div>
+
+            <!-- Step 1: send + verify OTP -->
+            <div class="reg-step" data-reg-step="1">
+              <div class="form-grid">
+                <label>Full name
+                  <input name="fullname" id="regFullname" required placeholder="Letters and spaces only" pattern="[A-Za-z ]{3,50}" />
+                </label>
+                <label>Email
+                  <input name="email" id="regEmail" type="email" required autocomplete="email" placeholder="you@example.com" />
+                </label>
+                <label>Phone (BD)
+                  <input name="phone" id="regPhone" required placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}" />
+                </label>
+              </div>
+              <button type="button" id="sendOtpBtn"><span>Send verification code</span></button>
+
+              <div class="otp-row" id="otpRow" hidden>
+                <label>Enter the 6-digit code sent to your email
+                  <input name="otp" id="regOtp" inputmode="numeric" placeholder="123456" />
+                </label>
+                <button type="button" id="verifyOtpBtn"><span>Verify code</span></button>
+              </div>
+              <div id="registerStepStatus" class="status auth-status" hidden></div>
+            </div>
+
+            <!-- Step 2: password + submit -->
+            <div class="reg-step" data-reg-step="2" hidden>
+              <div class="form-grid">
+                <label>Password
+                  <input name="password" id="regPassword" type="password" required minlength="8" maxlength="30" placeholder="8–30 characters" />
+                </label>
+                <label>Confirm password
+                  <input name="confirmPassword" id="regConfirmPassword" type="password" required minlength="8" maxlength="30" placeholder="Repeat password" />
+                </label>
+              </div>
+              <button type="submit"><span>Create account</span></button>
+              <div id="registerStatus" class="status auth-status" hidden></div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Signed-in: profile -->
+        <div id="profileArea" hidden>
+          <div class="panel profile-summary" id="profileSummary"></div>
+
+          <form id="profileEditForm" class="panel profile-form">
+            <div class="panel-title">
+              <span>ID</span>
+              <div>
+                <h2 id="profileFormTitle">Create your profile</h2>
+                <p>This powers your saved academic record — reuse it across every advisor run.</p>
+              </div>
+            </div>
+
+            <div class="avatar-row">
+              <div class="avatar-preview" id="avatarPreview">?</div>
+              <label class="avatar-upload">Profile photo (optional, small image)
+                <input type="file" id="avatarFile" accept="image/*" />
+                <span class="avatar-hint" id="avatarHint">PNG/JPG, under ~150KB works best.</span>
+              </label>
+            </div>
+
+            <div class="form-grid">
+              <label>I am a
+                <select name="profile_type" id="profileType">
+                  <option value="student">Student</option>
+                  <option value="applicant">Prospective applicant</option>
+                  <option value="graduate">Graduate</option>
+                  <option value="mentor">Mentor / counselor</option>
+                </select>
+              </label>
+              <label>ID / roll number
+                <input name="id_number" id="profileIdNumber" placeholder="University or board ID" />
+              </label>
+              <label>Institution
+                <input name="institution" id="profileInstitution" placeholder="Current or last institution" />
+              </label>
+              <label>Department
+                <input name="department" id="profileDepartment" placeholder="e.g. Computer Science" />
+              </label>
+              <label>CGPA
+                <input name="cgpa" id="profileCgpa" type="number" min="0" max="5" step="0.01" placeholder="e.g. 3.85" />
+              </label>
+              <label>Semester / year
+                <input name="semester" id="profileSemester" placeholder="e.g. 8th semester" />
+              </label>
+              <label>Graduation year
+                <input name="graduation_year" id="profileGradYear" placeholder="e.g. 2026" />
+              </label>
+              <label>Address
+                <input name="address" id="profileAddress" placeholder="City, District" />
+              </label>
+            </div>
+
+            <label class="bio-label">Short bio
+              <textarea name="bio" id="profileBio" rows="3" placeholder="A couple of lines about your goals abroad..."></textarea>
+            </label>
+
+            <div class="profile-actions">
+              <button type="button" id="importFromCvBtn" class="secondary-btn"><span>Import from analyzed CV</span></button>
+              <button type="submit" id="profileSubmitBtn"><span>Save profile</span></button>
+            </div>
+            <div id="profileStatus" class="status auth-status" hidden></div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Set this to your deployed study-abroad-ai-bd backend URL on Render,
+      // e.g. "https://study-abroad-api.onrender.com". Leave empty ("") to
+      // call same-origin /api/... (only works when frontend + API share a domain).
+      window.APP_API_BASE = "";
+      // Set this to your deployed authcore-backend URL on Render,
+      // e.g. "https://authcore-backend.onrender.com/api".
+      window.AUTHCORE_API_BASE = "";
+    </script>
+    <script src="/app.js" type="module"></script>
+    <script src="/sop.js" type="module"></script>
+    <script src="/auth.js" type="module"></script>
+  </body>
+</html>
